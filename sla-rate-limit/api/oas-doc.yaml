@@ -1,117 +1,52 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: Team API
-  description: Team api 
+  title: Evolution API
+  description: Evolution api 
   x-sla:
     $ref: ./plans.yaml
 security:
   - BearerAuth: []
 paths:
-  /api/v1/teams:
-    x-router-controller: teamsController
+  /api/v1/evolutions:
+    x-router-controller: evolutionsController
     get:
-      description: Returns all teams
-      operationId: getTeams
+      description: Returns all evolutions
+      operationId: getEvolutions
       responses:
         200:
-          description: Team list
+          description: Evolution list
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/team'
+                  $ref: '#/components/schemas/evolution'
         default:
           description: Unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-    post:
-      description: Creates a new team
-      operationId: addTeam
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/team'
-        description: Team to be created
-        required: true
-      responses:
-        201:
-          description: Team
-        default:
-            description: Unexpected error
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-                  
-  /api/v1/teams/{id}:
-    x-router-controller: teamsController
+  /api/v1/evolutions/{period}:
+    x-router-controller: evolutionsController
     get:
-      description: Returns a single team by its id
-      operationId: findByid
+      description: Returns a single evolution by its period
+      operationId: findByperiod
       parameters:
         - required: true
-          name: id
-          description: id of the team to fetch
+          name: period
+          description: period of the evolution to fetch
           in: path
           schema:
             type: number
       responses:
         200:
-          description: Team found by id
+          description: Evolution found by period
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/team'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-    put:
-      description: Update a team based on its id
-      operationId: updateTeam
-      parameters:
-        - required: true
-          name: id
-          description: id of the team to update
-          in: path
-          schema:
-            type: number
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/team'
-        description: Team to be updated
-        required: true
-      responses:
-        '204':
-          description: Team updated
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-    delete:
-      description: Deletes a single team based on its id
-      operationId: deleteTeam
-      parameters:
-        - required: true
-          name: id
-          description: id of the team to delete
-          in: path
-          schema:
-            type: number
-      responses:
-        '204':
-          description: Team deleted
+                $ref: '#/components/schemas/evolution'
         default:
           description: Unexpected error
           content:
@@ -126,25 +61,27 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    team:
+    evolution:
         type: object
         required:
-          - id
+          - period
         properties:
-          id:
+          period:
             type: number
-          name:
+          territory:
             type: string
-          code:
-            type: string
-          country:
-            type: string
-          founded:
+          total_population:
             type: number
-          national:
-            type: boolean
-          logo:
-            type: string
+          man:
+            type: number
+          woman:
+            type: number
+          under_sixteen_years:
+            type: number
+          from_sixteen_to_sixty_four_years:
+            type: number
+          sixty_five_and_over:
+            type: number
     error:
       type: object
       required:
